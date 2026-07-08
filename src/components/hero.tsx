@@ -9,6 +9,7 @@ import victoriaPhoto from "../assets/victoria.JPEG?url";
 import CountdownSection from "./countdown-section";
 import ScheduleSection from "./schedule-section";
 import ListaPresentes from "./listaPresentes";
+import Galeria from "./galeria";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -110,7 +111,7 @@ function HeroIntro() {
         );
 
       gsap.to("[data-hero-photo='natalia']", {
-        yPercent: -6,
+        yPercent: -12,
         ease: "none",
         scrollTrigger: {
           trigger: root,
@@ -121,7 +122,7 @@ function HeroIntro() {
       });
 
       gsap.to("[data-hero-photo='victoria']", {
-        yPercent: 7,
+        yPercent: 14,
         ease: "none",
         scrollTrigger: {
           trigger: root,
@@ -223,16 +224,14 @@ function HeroIntro() {
                   data-hero-meta
                   className='mt-1 text-xs tracking-wide text-foreground/55'
                 >
-                  {GRADUATION_MEETING.city} — 19h30
+                  {GRADUATION_MEETING.city}
                 </p>
               </div>
             </div>
           </div>
 
           <div className='relative mx-auto h-[clamp(440px,62vw,760px)] w-full max-w-[760px] lg:mx-0 lg:max-w-none max-[640px]:h-[clamp(390px,116vw,540px)]'>
-            <BotanicalOrnament
-              className='pointer-events-none absolute hidden text-primary/16 max-[640px]:bottom-[-12%] max-[640px]:left-[-5.5rem] max-[640px]:block max-[640px]:w-[250px] max-[640px]:-rotate-12'
-            />
+            <BotanicalOrnament className='pointer-events-none absolute hidden text-primary/16 max-[640px]:bottom-[-12%] max-[640px]:left-[-5.5rem] max-[640px]:block max-[640px]:w-[250px] max-[640px]:-rotate-12' />
 
             <div
               className='absolute -left-10 top-[8%] h-[54%] w-[78%] overflow-hidden rounded-[6px] border border-white/60 bg-white/25 shadow-[0_24px_80px_rgba(33,25,26,0.14)] max-[640px]:left-0 max-[640px]:top-[5%] max-[640px]:h-[51%] max-[640px]:w-[88%]'
@@ -280,6 +279,7 @@ export default function Hero() {
     <>
       <HeroIntro />
       <CountdownSection />
+      <Galeria />
       <ScheduleSection />
       <ListaPresentes />
     </>

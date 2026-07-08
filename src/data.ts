@@ -8,7 +8,7 @@ export const GRADUATION_DATE_PARTS = {
 
 export const GRADUATION_MEETING = {
   venue: "Cofresinos Arena",
-  city: "Nova Hartz",
+  city: "RST 464, 2086, Nova Hartz - RS",
 };
 
 export const TIMELINE = [

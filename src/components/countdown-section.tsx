@@ -66,7 +66,7 @@ export default function CountdownSection() {
   return (
     <section
       ref={rootRef}
-      className='bg-background flex items-center py-22 md:py-40 '
+      className='bg-background flex items-center py-30 pt-40 md:py-40 '
       aria-labelledby='countdown-title'
     >
       <div className={sectionInnerClassName}>

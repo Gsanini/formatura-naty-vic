@@ -48,7 +48,7 @@ export function EventTimelineSection() {
   return (
     <section
       ref={rootRef}
-      className='border-t border-border bg-background py-22 md:py-40 '
+      className='bg-background pb-20 pt-20 md:pb-40 md:pt-30'
     >
       <div className='mx-auto w-[min(76vw,1468px)] max-xl:w-[min(88vw,1120px)] max-[900px]:w-[min(calc(100%_-_48px),720px)] max-[640px]:w-[min(calc(100%_-_32px),520px)]'>
         <header
