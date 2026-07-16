@@ -1,4 +1,4 @@
-export const GRADUATION_DATE = new Date("2026-09-05T19:30:00-03:00");
+export const GRADUATION_DATE = new Date("2026-09-05T19:45:00-03:00");
 
 export const GRADUATION_DATE_PARTS = {
   day: "05",
@@ -13,34 +13,34 @@ export const GRADUATION_MEETING = {
 
 export const TIMELINE = [
   {
-    time: "19:30",
+    time: "19h",
     title: "Recepção dos convidados",
-    description: "Welcome drink e ambientação.",
+    description: "Chegada, abraços e começo da celebração.",
   },
   {
-    time: "20:30",
-    title: "Entrada das formandas",
-    description: "Cortejo solene ao som da orquestra.",
+    time: "19h45",
+    title: "Brinde e janta",
+    description: "Momento do brinde e início do jantar.",
   },
   {
-    time: "21:00",
-    title: "Jantar",
-    description: "Menu assinado por chef convidado.",
+    time: "21h",
+    title: "Abertura do bar",
+    description: "Bar liberado para começar a aquecer a pista.",
   },
   {
-    time: "22:00",
-    title: "Brinde",
-    description: "Momento oficial de celebração.",
+    time: "22h",
+    title: "Atração musical",
+    description: "Banda ao vivo para abrir a festa.",
   },
   {
-    time: "23:00",
-    title: "Festa",
-    description: "Pista aberta, DJ residente.",
+    time: "23h30",
+    title: "DJ",
+    description: "Pista aberta com DJ.",
   },
   {
-    time: "00:00",
-    title: "Surpresas da noite",
-    description: "Ato final, guardado a sete chaves.",
+    time: "01:00",
+    title: "DJ",
+    description: "A festa continua na pista.",
   },
 ];
 

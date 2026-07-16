@@ -1,7 +1,8 @@
-import { useEffect, useRef, type SVGProps } from "react";
+import { useEffect, useRef, type ImgHTMLAttributes } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GRADUATION_DATE_PARTS, GRADUATION_MEETING } from "../data";
+import flowerOrnament from "../assets/flowerpng.png";
 import nataliaPhoto from "../assets/natalia.jpeg";
 import nataliaPhoto1200 from "../assets/natalia-1200.jpeg";
 import nataliaPhoto1800 from "../assets/natalia-1800.jpeg";
@@ -19,52 +20,19 @@ const heroInnerClassName =
 const eyebrowClassName =
   "font-body text-[0.68rem] font-medium uppercase leading-none tracking-[0.46em] text-foreground/55";
 
-function BotanicalOrnament({ className, ...props }: SVGProps<SVGSVGElement>) {
+function BotanicalOrnament({
+  className,
+  ...props
+}: ImgHTMLAttributes<HTMLImageElement>) {
   return (
-    <svg
+    <img
       aria-hidden='true'
-      className={className}
-      fill='none'
-      viewBox='0 0 460 460'
+      alt=''
+      className={`select-none object-contain [mask-image:radial-gradient(ellipse_at_68%_24%,#000_0%,#000_45%,transparent_74%)] [mix-blend-mode:multiply] ${className ?? ""}`}
+      draggable='false'
+      src={flowerOrnament}
       {...props}
-    >
-      <path
-        d='M230 418C227 344 229 280 243 213C256 149 286 93 337 50'
-        stroke='currentColor'
-        strokeLinecap='round'
-        strokeWidth='1.2'
-      />
-      <path
-        d='M245 212C203 163 166 132 116 116C151 170 184 197 245 212Z'
-        stroke='currentColor'
-        strokeLinejoin='round'
-        strokeWidth='1.2'
-      />
-      <path
-        d='M263 151C232 100 205 70 162 48C181 103 211 136 263 151Z'
-        stroke='currentColor'
-        strokeLinejoin='round'
-        strokeWidth='1.2'
-      />
-      <path
-        d='M258 254C309 218 351 202 410 204C368 250 323 266 258 254Z'
-        stroke='currentColor'
-        strokeLinejoin='round'
-        strokeWidth='1.2'
-      />
-      <path
-        d='M239 315C195 284 154 270 98 274C135 315 178 329 239 315Z'
-        stroke='currentColor'
-        strokeLinejoin='round'
-        strokeWidth='1.2'
-      />
-      <path
-        d='M319 62C310 39 321 18 343 13C365 8 386 23 389 46C394 78 364 102 335 91C308 82 300 54 319 34'
-        stroke='currentColor'
-        strokeLinecap='round'
-        strokeWidth='1.2'
-      />
-    </svg>
+    />
   );
 }
 
@@ -134,7 +102,6 @@ function HeroIntro() {
 
       gsap.to("[data-hero-ornament]", {
         yPercent: -9,
-        rotate: 3,
         ease: "none",
         scrollTrigger: {
           trigger: root,
@@ -155,11 +122,11 @@ function HeroIntro() {
       aria-labelledby='hero-title'
     >
       <BotanicalOrnament
-        className='pointer-events-none absolute -left-28 top-14 -z-10 w-[420px] text-primary/20 max-[900px]:-left-44 max-[900px]:top-24 max-[900px]:w-[360px] max-[640px]:!left-auto max-[640px]:!right-[-6rem] max-[640px]:!top-0 max-[640px]:!w-[300px] max-[640px]:-scale-x-100'
+        className='pointer-events-none absolute -left-34 top-0 -z-10 w-[min(58vw,560px)] -scale-x-100 rotate-[-8deg] opacity-45 max-[900px]:-left-42 max-[900px]:top-20 max-[900px]:w-[430px] max-[640px]:!left-auto max-[640px]:!right-[-2.75rem] max-[640px]:!top-[-1.25rem] max-[640px]:!w-[260px] max-[640px]:scale-x-100 max-[640px]:rotate-[-4deg] max-[640px]:opacity-45'
         data-hero-ornament
       />
       <BotanicalOrnament
-        className='pointer-events-none absolute -right-24 bottom-2 -z-10 w-[360px] -scale-x-100 rotate-12 text-accent/16 max-[900px]:-right-48 max-[900px]:bottom-40'
+        className='pointer-events-none absolute -right-28 top-20 -z-10 w-[min(38vw,460px)] rotate-12 opacity-32 max-[900px]:-right-34 max-[900px]:top-32 max-[900px]:w-[360px] max-[640px]:hidden'
         data-hero-ornament
       />
 
@@ -231,7 +198,7 @@ function HeroIntro() {
           </div>
 
           <div className='relative mx-auto h-[clamp(440px,62vw,760px)] w-full max-w-[760px] lg:mx-0 lg:max-w-none max-[640px]:h-[clamp(390px,116vw,540px)]'>
-            <BotanicalOrnament className='pointer-events-none absolute hidden text-primary/16 max-[640px]:bottom-[-12%] max-[640px]:left-[-5.5rem] max-[640px]:block max-[640px]:w-[250px] max-[640px]:-rotate-12' />
+            <BotanicalOrnament className='pointer-events-none absolute hidden max-[640px]:bottom-[-8%] max-[640px]:left-[-3.75rem] max-[640px]:block max-[640px]:w-[220px] max-[640px]:-scale-x-100 max-[640px]:-rotate-12 max-[640px]:opacity-35' />
 
             <div
               className='absolute -left-10 top-[8%] h-[54%] w-[78%] overflow-hidden rounded-[6px] border border-white/60 bg-white/25 shadow-[0_24px_80px_rgba(33,25,26,0.14)] max-[640px]:left-0 max-[640px]:top-[5%] max-[640px]:h-[51%] max-[640px]:w-[88%]'

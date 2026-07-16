@@ -35,7 +35,50 @@ export default function CountdownSection() {
       return;
     }
 
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    const media = gsap.matchMedia();
+
     const ctx = gsap.context(() => {
+      media.add("(max-width: 640px)", () => {
+        const mobileIntro = gsap.timeline({
+          scrollTrigger: {
+            trigger: root,
+            start: "top 86%",
+            end: "center 48%",
+            scrub: 0.7,
+          },
+        });
+
+        mobileIntro
+          .from("[data-count-label]", {
+            opacity: 0,
+            y: 18,
+            stagger: 0.08,
+            ease: "none",
+            duration: 0.35,
+          })
+          .from(
+            "[data-count-item]",
+            {
+              opacity: 0,
+              y: 64,
+              scale: 0.92,
+              stagger: 0.12,
+              ease: "none",
+              duration: 0.68,
+            },
+            0.12,
+          );
+      });
+
+      media.add("(min-width: 641px)", () => {
       gsap.from("[data-count-item]", {
         opacity: 0,
         y: 40,
@@ -51,9 +94,13 @@ export default function CountdownSection() {
         ease: "power2.out",
         scrollTrigger: { trigger: root, start: "top 70%" },
       });
+      });
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      media.revert();
+      ctx.revert();
+    };
   }, []);
 
   const countdownItems = [

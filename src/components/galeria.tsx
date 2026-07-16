@@ -1,10 +1,20 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import nataliaPhoto from "../assets/natalia.jpeg";
-import nataliaPhoto1200 from "../assets/natalia-1200.jpeg";
-import nataliaPhoto1800 from "../assets/natalia-1800.jpeg";
-import victoriaPhoto from "../assets/victoria.JPEG?url";
+import natyAmigasPhoto from "../assets/fotosGaleria/natyAmigas.jpeg";
+import natyEdsonPhoto from "../assets/fotosGaleria/NatyEdson.jpeg";
+import natyGabrielPhoto from "../assets/fotosGaleria/natyGabriel.jpeg";
+import natyJaquePhoto from "../assets/fotosGaleria/NatyJaque.jpeg";
+import natyMartaPhoto from "../assets/fotosGaleria/natyMarta.jpeg";
+import natySozinhaPhoto from "../assets/fotosGaleria/natysozinha.jpeg";
+import natySozinha2Photo from "../assets/fotosGaleria/natysozinha2.jpeg";
+import natyVicJuntasPhoto from "../assets/fotosGaleria/natyvicjuntas.jpeg";
+import natyVicJuntas2Photo from "../assets/fotosGaleria/natyvicjuntas2.jpeg";
+import vicEdsonPhoto from "../assets/fotosGaleria/vicEdson.jpeg";
+import vicJaquePhoto from "../assets/fotosGaleria/vicJaque.jpeg";
+import vicLucasPhoto from "../assets/fotosGaleria/vicLucas.jpeg";
+import vicSozinhaPhoto from "../assets/fotosGaleria/vicsozinha.jpeg";
+import vicSozinha2Photo from "../assets/fotosGaleria/vicSozinha2.jpeg";
 import { countdownLabelClassName } from "./countdown-section";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -22,61 +32,102 @@ const galleryImageClassName =
 
 const galleryItems = [
   {
-    src: nataliaPhoto1200,
-    srcSet: `${nataliaPhoto1200} 1200w, ${nataliaPhoto1800} 1800w, ${nataliaPhoto} 4160w`,
-    sizes: "(max-width: 640px) 31vw, (max-width: 1200px) 28vw, 300px",
-    alt: "Natalia em ensaio de formatura ao ar livre",
+    src: vicJaquePhoto,
+    alt: "Victoria com Jaque no ensaio de formatura",
     className: "col-start-1 row-start-1 col-span-2 row-span-3",
-    imageClassName: "object-[56%_43%]",
+    imageClassName: "object-[50%_44%]",
     drift: "-4",
   },
   {
-    src: victoriaPhoto,
-    alt: "Victoria sentada em uma poltrona durante o ensaio",
+    src: natySozinha2Photo,
+    alt: "Natalia sozinha no ensaio de formatura",
     className: "col-start-3 row-start-1 col-span-2 row-span-2",
-    imageClassName: "object-[47%_38%]",
+    imageClassName: "object-[50%_38%]",
     drift: "3",
   },
   {
-    src: nataliaPhoto1800,
-    srcSet: `${nataliaPhoto1200} 1200w, ${nataliaPhoto1800} 1800w, ${nataliaPhoto} 4160w`,
-    sizes: "(max-width: 640px) 31vw, (max-width: 1200px) 28vw, 300px",
-    alt: "Retrato de formatura da Natalia com o canudo",
+    src: natyVicJuntasPhoto,
+    alt: "Natalia e Victoria juntas no ensaio de formatura",
     className: "col-start-5 row-start-1 col-span-2 row-span-3",
-    imageClassName: "object-[62%_34%]",
+    imageClassName: "object-[50%_45%]",
     drift: "-3",
   },
   {
-    src: victoriaPhoto,
-    alt: "Detalhe do ensaio de formatura da Victoria",
+    src: natyMartaPhoto,
+    alt: "Natalia com Marta no ensaio de formatura",
     className: "col-start-1 row-start-4 col-span-2 row-span-3",
-    imageClassName: "object-[35%_60%]",
+    imageClassName: "object-[48%_40%]",
     drift: "4",
   },
   {
-    src: nataliaPhoto,
-    srcSet: `${nataliaPhoto1200} 1200w, ${nataliaPhoto1800} 1800w, ${nataliaPhoto} 4160w`,
-    sizes: "(max-width: 640px) 31vw, (max-width: 1200px) 28vw, 300px",
-    alt: "Natalia sorrindo no ensaio de formatura",
+    src: vicSozinhaPhoto,
+    alt: "Victoria sozinha no ensaio de formatura",
     className: "col-start-3 row-start-3 col-span-2 row-span-2",
     imageClassName: "object-[50%_38%]",
     drift: "-2",
   },
   {
-    src: victoriaPhoto,
-    alt: "Victoria segurando o canudo no ensaio",
+    src: natyEdsonPhoto,
+    alt: "Natalia com Edson no ensaio de formatura",
     className: "col-start-5 row-start-4 col-span-2 row-span-3",
-    imageClassName: "object-[54%_45%]",
+    imageClassName: "object-[50%_40%]",
     drift: "3",
   },
   {
-    src: nataliaPhoto1200,
-    srcSet: `${nataliaPhoto1200} 1200w, ${nataliaPhoto1800} 1800w, ${nataliaPhoto} 4160w`,
-    sizes: "(max-width: 640px) 31vw, (max-width: 1200px) 28vw, 300px",
-    alt: "Detalhe do retrato de formatura da Natalia",
+    src: vicLucasPhoto,
+    alt: "Victoria com Lucas no ensaio de formatura",
     className: "col-start-3 row-start-5 col-span-2 row-span-2",
-    imageClassName: "object-[35%_38%]",
+    imageClassName: "object-[50%_40%]",
     drift: "2",
+  },
+  {
+    src: natyVicJuntas2Photo,
+    alt: "Natalia e Victoria em retrato juntas",
+    className: "col-start-1 row-start-7 col-span-2 row-span-3",
+    imageClassName: "object-[50%_40%]",
+    drift: "-3",
+  },
+  {
+    src: vicEdsonPhoto,
+    alt: "Victoria com Edson no ensaio de formatura",
+    className: "col-start-3 row-start-7 col-span-2 row-span-2",
+    imageClassName: "object-[50%_45%]",
+    drift: "4",
+  },
+  {
+    src: natyJaquePhoto,
+    alt: "Natalia com Jaque no ensaio de formatura",
+    className: "col-start-5 row-start-7 col-span-2 row-span-3",
+    imageClassName: "object-[50%_40%]",
+    drift: "-2",
+  },
+  {
+    src: vicSozinha2Photo,
+    alt: "Retrato da Victoria no ensaio de formatura",
+    className: "col-start-1 row-start-10 col-span-2 row-span-3",
+    imageClassName: "object-[50%_40%]",
+    drift: "2",
+  },
+  {
+    src: natyAmigasPhoto,
+    alt: "Natalia com amigas no ensaio de formatura",
+    className: "col-start-3 row-start-9 col-span-2 row-span-2",
+    imageClassName: "object-[50%_46%]",
+    drift: "-4",
+  },
+  {
+    src: natyGabrielPhoto,
+    alt: "Natalia com Gabriel no ensaio de formatura",
+    className: "col-start-5 row-start-10 col-span-2 row-span-3",
+    imageClassName: "object-[50%_40%]",
+    drift: "3",
+  },
+  {
+    src: natySozinhaPhoto,
+    alt: "Retrato da Natalia no ensaio de formatura",
+    className: "col-start-3 row-start-11 col-span-2 row-span-2",
+    imageClassName: "object-[50%_38%]",
+    drift: "-3",
   },
 ];
 
@@ -164,7 +215,7 @@ export default function Galeria() {
 
         <div
           data-gallery-grid
-          className='mx-auto mt-[82px] grid aspect-square w-full max-w-[940px] grid-cols-6 grid-rows-6 gap-2.5 max-[900px]:mt-[64px] max-[640px]:mt-[50px] max-[640px]:gap-1.5'
+          className='mx-auto mt-[82px] grid aspect-[1/2] w-full max-w-[940px] grid-cols-6 grid-rows-[repeat(12,minmax(0,1fr))] gap-2.5 max-[900px]:mt-[64px] max-[640px]:mt-[50px] max-[640px]:gap-1.5'
         >
           {galleryItems.map((item) => (
             <figure
@@ -174,8 +225,7 @@ export default function Galeria() {
             >
               <img
                 src={item.src}
-                srcSet={item.srcSet}
-                sizes={item.sizes}
+                sizes='(max-width: 640px) 50vw, (max-width: 900px) 44vw, 360px'
                 alt={item.alt}
                 loading='lazy'
                 decoding='async'
