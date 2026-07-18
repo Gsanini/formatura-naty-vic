@@ -4,7 +4,6 @@ import {
   MessageCircle,
   Plus,
   Trash,
-  Trash2,
   UserRound,
   UsersRound,
 } from "lucide-react";
