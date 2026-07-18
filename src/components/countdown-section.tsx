@@ -79,21 +79,21 @@ export default function CountdownSection() {
       });
 
       media.add("(min-width: 641px)", () => {
-      gsap.from("[data-count-item]", {
-        opacity: 0,
-        y: 40,
-        duration: 1,
-        ease: "power3.out",
-        stagger: 0.1,
-        scrollTrigger: { trigger: root, start: "top 75%" },
-      });
+        gsap.from("[data-count-item]", {
+          opacity: 0,
+          y: 40,
+          duration: 1,
+          ease: "power3.out",
+          stagger: 0.1,
+          scrollTrigger: { trigger: root, start: "top 75%" },
+        });
 
-      gsap.from("[data-count-label]", {
-        opacity: 0,
-        duration: 1,
-        ease: "power2.out",
-        scrollTrigger: { trigger: root, start: "top 70%" },
-      });
+        gsap.from("[data-count-label]", {
+          opacity: 0,
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: { trigger: root, start: "top 70%" },
+        });
       });
     }, root);
 
@@ -125,12 +125,12 @@ export default function CountdownSection() {
           >
             CONTAGEM REGRESSIVA
           </p>
-          <p
+          {/* <p
             data-count-label
             className="pr-px font-display text-[16px] font-normal italic text-foreground/60 leading-none [font-variation-settings:'SOFT'_20,'WONK'_1] max-[900px]:justify-self-start"
           >
             até o brinde
-          </p>
+          </p> */}
         </div>
 
         <div

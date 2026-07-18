@@ -1,4 +1,5 @@
-import { useEffect, useRef, type ImgHTMLAttributes } from "react";
+import { useEffect, useRef, useState, type ImgHTMLAttributes } from "react";
+import { MapPin } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GRADUATION_DATE_PARTS, GRADUATION_MEETING } from "../data";
@@ -11,6 +12,7 @@ import CountdownSection from "./countdown-section";
 import ScheduleSection from "./schedule-section";
 import ListaPresentes from "./listaPresentes";
 import Galeria from "./galeria";
+import ConfirmacaoPresenca from "./confirmacao-presenca";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,6 +21,12 @@ const heroInnerClassName =
 
 const eyebrowClassName =
   "font-body text-[0.68rem] font-medium uppercase leading-none tracking-[0.46em] text-foreground/55";
+
+const meetingMapQuery = `${GRADUATION_MEETING.venue}, ${GRADUATION_MEETING.city}`;
+const meetingDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(meetingMapQuery)}`;
+
+const locationMapClassName =
+  "group block w-fit min-w-[180px] text-left transition focus:outline-none focus:ring-2 focus:ring-accent/30 md:ml-auto md:text-right";
 
 function BotanicalOrnament({
   className,
@@ -38,6 +46,7 @@ function BotanicalOrnament({
 
 function HeroIntro() {
   const rootRef = useRef<HTMLElement>(null);
+  const [isMapLinkEnabled, setIsMapLinkEnabled] = useState(false);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -51,12 +60,19 @@ function HeroIntro() {
     ).matches;
 
     if (prefersReducedMotion) {
+      setIsMapLinkEnabled(true);
       return;
     }
 
     const ctx = gsap.context(() => {
+      setIsMapLinkEnabled(false);
+
       const intro = gsap.timeline({
         defaults: { duration: 0.9, ease: "power3.out" },
+        onComplete: () => {
+          gsap.set("[data-hero-meta]", { clearProps: "opacity,transform" });
+          setIsMapLinkEnabled(true);
+        },
       });
 
       intro
@@ -118,21 +134,21 @@ function HeroIntro() {
   return (
     <section
       ref={rootRef}
-      className='relative isolate overflow-hidden bg-background pt-15 pb-8 text-foreground sm:py-10 lg:min-h-svh lg:py-12'
+      className='relative isolate overflow-hidden bg-background pt-15 pb-8 text-foreground sm:py-10 lg:min-h-svh lg:py-10'
       aria-labelledby='hero-title'
     >
       <BotanicalOrnament
-        className='pointer-events-none absolute -left-34 top-0 -z-10 w-[min(58vw,560px)] -scale-x-100 rotate-[-8deg] opacity-45 max-[900px]:-left-42 max-[900px]:top-20 max-[900px]:w-[430px] max-[640px]:!left-auto max-[640px]:!right-[-2.75rem] max-[640px]:!top-[-1.25rem] max-[640px]:!w-[260px] max-[640px]:scale-x-100 max-[640px]:rotate-[-4deg] max-[640px]:opacity-45'
+        className='pointer-events-none absolute -left-34 -top-10 -z-10 w-[min(58vw,560px)] -scale-x-100 rotate-[-8deg] opacity-45 max-[900px]:-left-42 max-[900px]:top-20 max-[900px]:w-[430px] max-[640px]:!left-auto max-[640px]:!right-[-2.75rem] max-[640px]:!top-[-1.25rem] max-[640px]:!w-[260px] max-[640px]:scale-x-100 max-[640px]:rotate-[-4deg] max-[640px]:opacity-45'
         data-hero-ornament
       />
       <BotanicalOrnament
-        className='pointer-events-none absolute -right-28 top-20 -z-10 w-[min(38vw,460px)] rotate-12 opacity-32 max-[900px]:-right-34 max-[900px]:top-32 max-[900px]:w-[360px] max-[640px]:hidden'
+        className='pointer-events-none absolute -right-20 -top-5 -z-10 w-[min(38vw,460px)] rotate-12 opacity-32 max-[900px]:-right-34 max-[900px]:top-32 max-[900px]:w-[360px] max-[640px]:hidden'
         data-hero-ornament
       />
 
       <div className={heroInnerClassName}>
         <div className='grid min-h-[calc(100svh-96px)] items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(520px,1.1fr)] lg:gap-14 max-[900px]:min-h-0'>
-          <div className='relative z-10 pt-2 max-[900px]:pt-0'>
+          <div className='relative z-10 lg:-mt-12 max-[900px]:pt-0'>
             <p data-hero-eyebrow className={eyebrowClassName}>
               Formatura 2026
             </p>
@@ -150,10 +166,10 @@ function HeroIntro() {
 
             <p
               data-hero-copy
-              className="mt-8 max-w-[34rem] font-display text-[clamp(1.1rem,0.9vw,2.2rem)] font-light leading-[1.08] tracking-normal text-foreground/55 [font-variation-settings:'SOFT'_18,'WONK'_1] max-[640px]:mt-6"
+              className="mt-8 max-w-[34rem] font-display text-[clamp(1rem,0.9vw,2.2rem)] font-light leading-[1.08] tracking-normal text-foreground/55 [font-variation-settings:'SOFT'_18,'WONK'_1] max-[640px]:mt-6"
             >
-              Duas irmãs, duas conquistas e uma noite inteira para celebrar o
-              fim de um ciclo.
+              Duas irmãs, dois sonhos realizados e uma noite inesquecível para
+              celebrar essa conquista em dobro.
             </p>
 
             <div className='mt-12 flex max-w-[720px] flex-col gap-8 md:flex-row md:items-start md:justify-between lg:mt-16'>
@@ -166,33 +182,72 @@ function HeroIntro() {
                 </p>
                 <p
                   data-hero-meta
-                  className='mt-3 font-display text-2xl text-primary'
+                  className='mt-3 font-display text-2xl text-primary inline-flex items-center gap-2'
                 >
                   {GRADUATION_DATE_PARTS.day} ·{" "}
                   {GRADUATION_DATE_PARTS.month.slice(0, 3)} ·{" "}
-                  {GRADUATION_DATE_PARTS.year}
+                  {GRADUATION_DATE_PARTS.year}{" "}
                 </p>
               </div>
 
-              <div className='text-left md:text-right'>
+              <div>
+                <p
+                  data-hero-meta
+                  className='text-[10px] uppercase tracking-[0.4em] text-foreground/55'
+                >
+                  Horário
+                </p>
+                <p
+                  data-hero-meta
+                  className='mt-3 font-display text-2xl text-primary inline-flex items-center gap-2'
+                >
+                  {GRADUATION_DATE_PARTS.time}
+                </p>
+              </div>
+
+              <div className='text-left md:min-w-[190px] md:text-right'>
                 <p
                   data-hero-meta
                   className='text-[10px] uppercase tracking-[0.4em] text-foreground/55'
                 >
                   Onde
                 </p>
-                <p
-                  data-hero-meta
-                  className='mt-3 font-display text-2xl text-primary'
-                >
-                  {GRADUATION_MEETING.venue}
-                </p>
-                <p
-                  data-hero-meta
-                  className='mt-1 text-xs tracking-wide text-foreground/55'
-                >
-                  {GRADUATION_MEETING.city}
-                </p>
+                <div data-hero-meta className='mt-3'>
+                  {isMapLinkEnabled ? (
+                    <a
+                      href={meetingDirectionsUrl}
+                      target='_blank'
+                      rel='noreferrer'
+                      aria-label='Abrir endereco da festa no Google Maps'
+                      title='Abrir no Google Maps'
+                      className={locationMapClassName}
+                    >
+                      <span className='block font-display text-2xl leading-tight text-primary'>
+                        {GRADUATION_MEETING.venue}
+                      </span>
+                      <span className='mt-2 inline-flex items-center gap-1.5 border-b border-accent/60 pb-0.5 text-xs tracking-wide text-foreground/60 transition group-hover:border-primary group-hover:text-primary'>
+                        <MapPin
+                          className='size-3.5 shrink-0 text-accent'
+                          strokeWidth={1.8}
+                        />
+                        <span>{GRADUATION_MEETING.city}</span>
+                      </span>
+                    </a>
+                  ) : (
+                    <span className={locationMapClassName}>
+                      <span className='block font-display text-2xl leading-tight text-primary'>
+                        {GRADUATION_MEETING.venue}
+                      </span>
+                      <span className='mt-2 inline-flex items-center gap-1.5 border-b border-accent/60 pb-0.5 text-xs tracking-wide text-foreground/60'>
+                        <MapPin
+                          className='size-3.5 shrink-0 text-foreground/60'
+                          strokeWidth={1.8}
+                        />
+                        <span>{GRADUATION_MEETING.city}</span>
+                      </span>
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -249,6 +304,7 @@ export default function Hero() {
       <Galeria />
       <ScheduleSection />
       <ListaPresentes />
+      <ConfirmacaoPresenca />
     </>
   );
 }

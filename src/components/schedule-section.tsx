@@ -21,17 +21,61 @@ export function EventTimelineSection() {
         scrollTrigger: { trigger: rootRef.current, start: "top 75%" },
       });
 
-      gsap.utils.toArray<HTMLElement>("[data-tl-row]").forEach((row) => {
-        gsap.from(row, {
-          opacity: 0,
-          y: 40,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: { trigger: row, start: "top 85%" },
-        });
-      });
+      const line = rootRef.current?.querySelector<HTMLElement>("[data-tl-line]");
+      const timelineItems = gsap.utils
+        .toArray<HTMLElement>("[data-tl-row]")
+        .map((row) => ({
+          dot: row.querySelector<HTMLElement>("[data-tl-dot]"),
+          revealTargets: gsap.utils.toArray<HTMLElement>(
+            row.querySelectorAll("[data-tl-reveal]"),
+          ),
+          threshold: 0,
+          visible: false,
+        }));
 
-      gsap.to("[data-tl-line-fill]", {
+      gsap.set("[data-tl-reveal]", { autoAlpha: 0, y: 24 });
+
+      const updateThresholds = () => {
+        if (!line) return;
+
+        const lineRect = line.getBoundingClientRect();
+        timelineItems.forEach((item) => {
+          if (!item.dot || !lineRect.height) return;
+
+          const dotRect = item.dot.getBoundingClientRect();
+          const dotCenterY = dotRect.top + dotRect.height / 2;
+          item.threshold = gsap.utils.clamp(
+            0,
+            1,
+            (dotCenterY - lineRect.top) / lineRect.height,
+          );
+        });
+      };
+
+      const setItemVisibility = (
+        item: (typeof timelineItems)[number],
+        visible: boolean,
+        immediate = false,
+      ) => {
+        if (item.visible === visible && !immediate) return;
+
+        item.visible = visible;
+        gsap.to(item.revealTargets, {
+          autoAlpha: visible ? 1 : 0,
+          y: visible ? 0 : 24,
+          duration: immediate ? 0 : 0.45,
+          ease: visible ? "power3.out" : "power2.out",
+          overwrite: true,
+        });
+      };
+
+      const updateItemsVisibility = (progress: number, immediate = false) => {
+        timelineItems.forEach((item) => {
+          setItemVisibility(item, progress >= item.threshold, immediate);
+        });
+      };
+
+      const lineTween = gsap.to("[data-tl-line-fill]", {
         scaleY: 1,
         ease: "none",
         scrollTrigger: {
@@ -39,8 +83,16 @@ export function EventTimelineSection() {
           start: "top 70%",
           end: "bottom 70%",
           scrub: true,
+          onRefresh: (self) => {
+            updateThresholds();
+            updateItemsVisibility(self.progress, true);
+          },
+          onUpdate: (self) => updateItemsVisibility(self.progress),
         },
       });
+
+      updateThresholds();
+      updateItemsVisibility(lineTween.scrollTrigger?.progress ?? 0, true);
     }, rootRef);
     return () => ctx.revert();
   }, []);
@@ -77,12 +129,12 @@ export function EventTimelineSection() {
         <div className='relative mt-[103px] max-[900px]:mt-[72px] max-[640px]:mt-[58px]'>
           <div
             data-tl-line
-            className='pointer-events-none absolute top-0 bottom-2.5 left-[168px] w-px overflow-hidden bg-border max-[640px]:left-3'
+            className='pointer-events-none absolute top-0 bottom-2.5 left-[168px] w-px overflow-hidden bg-border/50 max-[640px]:left-3'
             aria-hidden
           >
             <div
               data-tl-line-fill
-              className='h-full w-full origin-top scale-y-0 bg-accent'
+              className='h-full w-full origin-top scale-y-0 bg-accent '
             />
           </div>
 
@@ -93,16 +145,25 @@ export function EventTimelineSection() {
                 data-tl-row
                 className='group grid min-h-[192px] grid-cols-[168px_70px_minmax(0,1fr)] last:min-h-[124px] max-[640px]:min-h-[150px] max-[640px]:grid-cols-[38px_minmax(0,1fr)] max-[640px]:grid-rows-[auto_1fr] max-[640px]:last:min-h-24'
               >
-                <time className="relative z-10 whitespace-nowrap pr-6 font-display text-[1.7rem] font-semibold leading-[0.97] tracking-normal text-primary [font-variation-settings:'SOFT'_0,'WONK'_1] sm:text-[1.85rem] md:text-[2.2rem] lg:text-[2.3rem] max-[640px]:col-start-2 max-[640px]:pr-0">
+                <time
+                  data-tl-reveal
+                  className="relative z-10 whitespace-nowrap pr-6 font-display text-[1.7rem] font-semibold leading-[0.97] tracking-normal text-primary [font-variation-settings:'SOFT'_0,'WONK'_1] sm:text-[1.85rem] md:text-[2.2rem] lg:text-[2.3rem] max-[640px]:col-start-2 max-[640px]:pr-0"
+                >
                   {item.time}
                 </time>
                 <div
                   className='relative max-[640px]:col-start-1 max-[640px]:row-span-2'
                   aria-hidden='true'
                 >
-                  <span className='absolute top-[19px] left-[34px] size-2.5 rounded-full bg-accent transition-transform duration-500 group-hover:scale-150 max-[640px]:top-[17px] max-[640px]:left-[7px]' />
+                  <span
+                    data-tl-dot
+                    className='absolute top-[19px] left-[34px] size-2.5 rounded-full bg-accent transition-transform duration-500 group-hover:scale-150 max-[640px]:top-[17px] max-[640px]:left-[7px]'
+                  />
                 </div>
-                <div className='pt-px max-[640px]:col-start-2 max-[640px]:row-start-2 max-[640px]:pt-2.5'>
+                <div
+                  data-tl-reveal
+                  className='pt-px max-[640px]:col-start-2 max-[640px]:row-start-2 max-[640px]:pt-2.5'
+                >
                   <h3 className="font-display text-[1.2rem] font-light leading-[1.02] tracking-normal text-foreground [font-variation-settings:'SOFT'_15,'WONK'_1] sm:text-[1.5rem] md:text-[1.5rem] md:leading-[0.98] lg:text-[1.7rem] lg:leading-[0.95]">
                     {item.title}
                   </h3>

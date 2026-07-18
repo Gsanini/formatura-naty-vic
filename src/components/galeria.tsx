@@ -188,7 +188,7 @@ export default function Galeria() {
   return (
     <section
       ref={rootRef}
-      className='bg-background pb-20 pt-10 md:pb-40 md:pt-30'
+      className='bg-background pb-20 pt-10 md:pb-40 md:pt-25'
       aria-labelledby='galeria-title'
     >
       <div className={sectionInnerClassName}>
@@ -199,17 +199,17 @@ export default function Galeria() {
           <p
             className={`${countdownLabelClassName} max-[640px]:col-start-1 max-[640px]:row-start-1`}
           >
-            ensaio 2026
+            Prova de toga
           </p>
           <h2
             id='galeria-title'
             className='max-w-[880px] font-display text-[1.75rem] font-semibold leading-[0.98] tracking-normal text-foreground sm:text-[2.15rem] md:text-[3.2rem] md:leading-[0.96] lg:text-[3rem] lg:leading-[0.94] max-[640px]:col-start-1 max-[640px]:row-start-2 max-[640px]:max-w-full'
           >
             <span className='whitespace-nowrap max-[640px]:block max-[640px]:whitespace-normal'>
-              Os retratos
+              Um pouco
             </span>
             <br className='max-[640px]:hidden' />
-            <em className={titleAccentClassName}>antes da noite</em>
+            <em className={titleAccentClassName}>do que vem aí</em>
           </h2>
         </header>
 

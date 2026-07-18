@@ -4,6 +4,7 @@ export const GRADUATION_DATE_PARTS = {
   day: "05",
   month: "Setembro",
   year: "2026",
+  time: "19:00",
 };
 
 export const GRADUATION_MEETING = {
@@ -11,16 +12,18 @@ export const GRADUATION_MEETING = {
   city: "RST 464, 2086, Nova Hartz - RS",
 };
 
+export const RSVP_WHATSAPP_PHONE = "5551997162706";
+
 export const TIMELINE = [
   {
     time: "19h",
     title: "Recepção dos convidados",
-    description: "Chegada, abraços e começo da celebração.",
+    description: "Os primeiros sorrisos de uma noite feita para celebrar.",
   },
   {
     time: "19h45",
-    title: "Brinde e janta",
-    description: "Momento do brinde e início do jantar.",
+    title: "Brinde e jantar",
+    description: "Taças ao alto e um jantar especial.",
   },
   {
     time: "21h",
@@ -29,18 +32,18 @@ export const TIMELINE = [
   },
   {
     time: "22h",
-    title: "Atração musical",
-    description: "Banda ao vivo para abrir a festa.",
+    title: "Pagode ao vivo",
+    description: "Está só começando...",
   },
   {
     time: "23h30",
-    title: "DJ",
-    description: "Pista aberta com DJ.",
+    title: "DJ Cássio Tobias",
+    description: "Para ninguém ficar parado.",
   },
   {
     time: "01:00",
-    title: "DJ",
-    description: "A festa continua na pista.",
+    title: "DJ Severo",
+    description: "É hora de descer até o chãooooo!",
   },
 ];
 
