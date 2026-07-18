@@ -3,6 +3,7 @@ import {
   Check,
   MessageCircle,
   Plus,
+  Trash,
   Trash2,
   UserRound,
   UsersRound,
@@ -40,7 +41,8 @@ function uniqueNames(names: string[]) {
 
 function createConfirmationMessage(names: string[]) {
   const list = names.map((name) => `- ${name}`).join("\n");
-  const totalLabel = names.length === 1 ? "1 pessoa" : `${names.length} pessoas`;
+  const totalLabel =
+    names.length === 1 ? "1 pessoa" : `${names.length} pessoas`;
 
   return [
     "Confirmação de presença - Formatura Naty & Vic",
@@ -54,9 +56,7 @@ function createConfirmationMessage(names: string[]) {
 
 function createWhatsappUrl(message: string) {
   const cleanPhone = RSVP_WHATSAPP_PHONE.replace(/\D/g, "");
-  const baseUrl = cleanPhone
-    ? `https://wa.me/${cleanPhone}`
-    : "https://wa.me/";
+  const baseUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : "https://wa.me/";
 
   return `${baseUrl}?text=${encodeURIComponent(message)}`;
 }
@@ -67,7 +67,9 @@ export default function ConfirmacaoPresenca() {
   const [additionalNames, setAdditionalNames] = useState<string[]>([""]);
 
   const confirmedNames = useMemo(() => {
-    return uniqueNames([fullName, ...additionalNames].map(cleanName).filter(Boolean));
+    return uniqueNames(
+      [fullName, ...additionalNames].map(cleanName).filter(Boolean),
+    );
   }, [additionalNames, fullName]);
   const hasPrimaryName = cleanName(fullName).length >= 3;
   const canConfirm = hasPrimaryName && confirmedNames.length > 0;
@@ -153,7 +155,7 @@ export default function ConfirmacaoPresenca() {
   return (
     <section
       ref={rootRef}
-      className='bg-background py-22 md:py-30'
+      className='bg-background pt-22 pb-5 md:pt-30 md:pb-20'
       aria-labelledby='confirmacao-title'
     >
       <div className={sectionInnerClassName}>
@@ -237,7 +239,7 @@ export default function ConfirmacaoPresenca() {
                       disabled={additionalNames.length === 1 && !name.trim()}
                       onClick={() => handleRemoveAdditionalName(index)}
                     >
-                      <Trash2 className='size-4' strokeWidth={1.8} />
+                      <Trash className='size-4' strokeWidth={1.8} />
                     </button>
                   </div>
                 ))}
@@ -256,7 +258,7 @@ export default function ConfirmacaoPresenca() {
 
           <aside
             data-rsvp-panel
-            className='border-y border-border/60 py-7 lg:border-l lg:border-y-0 lg:py-0 lg:pl-8'
+            className='border-t border-border/60 py-7 lg:border-l lg:border-y-0 lg:py-0 lg:pl-8'
             aria-live='polite'
           >
             <div className='flex items-center justify-between gap-4'>
@@ -275,7 +277,10 @@ export default function ConfirmacaoPresenca() {
                     key={name}
                     className='flex min-h-10 items-center gap-2 border-b border-border/40 pb-2.5 font-body text-[0.9rem] leading-snug text-foreground/70 last:border-b-0 last:pb-0'
                   >
-                    <Check className='size-4 shrink-0 text-accent' strokeWidth={1.8} />
+                    <Check
+                      className='size-4 shrink-0 text-accent'
+                      strokeWidth={1.8}
+                    />
                     <span className='break-words'>{name}</span>
                   </li>
                 ))

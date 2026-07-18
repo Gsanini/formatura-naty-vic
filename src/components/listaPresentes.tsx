@@ -21,13 +21,19 @@ import botinasPhoto from "../assets/fotosPresentes/botinas.jpeg";
 import cobaiaPhoto from "../assets/fotosPresentes/cobaia.jpeg";
 import melhorPresentePhoto from "../assets/fotosPresentes/melhorPresente.jpeg";
 import patrocinadoresPhoto from "../assets/fotosPresentes/patrocinadoresOficiais.jpeg";
-import primeiroBuffetPhoto from "../assets/fotosPresentes/primeiroBuffet.jpeg";
 import pulseiraVipPhoto from "../assets/fotosPresentes/pulseiraVip.jpeg";
 import roubarDocinhoPhoto from "../assets/fotosPresentes/roubarDocinho.jpeg";
 import taxaConvidadoPhoto from "../assets/fotosPresentes/taxaParaConvidarAlguem.jpeg";
 import terapiaPhoto from "../assets/fotosPresentes/terapia.jpeg";
 import vestidosPhoto from "../assets/fotosPresentes/vestidos.jpeg";
 import zeGotinhaPhoto from "../assets/fotosPresentes/zegotinha.jpeg";
+import ajudaipagar from "../assets/fotosPresentes/ajudeipagar.jpeg";
+import direitojulgar from "../assets/fotosPresentes/direitojulgar.jpeg";
+import dj from "../assets/fotosPresentes/dj.jpeg";
+import intervencaodivina from "../assets/fotosPresentes/intervencaodivina.jpeg";
+import naodeinaad from "../assets/fotosPresentes/naodeinaad.jpeg";
+import parentefavorito from "../assets/fotosPresentes/parentefavorito.jpeg";
+
 import { countdownLabelClassName } from "./countdown-section";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -72,14 +78,14 @@ const recipients: Recipient[] = [
     id: "natalia",
     name: "Natalia",
     shortName: "Naty",
-    pixKey: "03576237038",
+    pixKey: "04307946065",
     merchantCity: "SAO PAULO",
   },
   {
     id: "victoria",
     name: "Victoria",
     shortName: "Vic",
-    pixKey: "+5551992208496",
+    pixKey: "04307953002",
     merchantCity: "SAO PAULO",
   },
 ];
@@ -101,14 +107,14 @@ const giftItems: GiftItem[] = [
   },
   {
     id: "gift-03",
-    description: "Pro Zé Gotinha aparecer na festa",
+    description: "Para o Zé Gotinha aparecer na festa",
     value: "R$ 80",
     image: zeGotinhaPhoto,
     imageClassName: "object-[50%_44%]",
   },
   {
     id: "gift-04",
-    description: "Pra ser cobaia da Naty",
+    description: "Para ser cobaia da Naty",
     value: "R$ 100",
     image: cobaiaPhoto,
     imageClassName: "object-[50%_46%]",
@@ -129,21 +135,21 @@ const giftItems: GiftItem[] = [
   },
   {
     id: "gift-07",
-    description: "Pra nunca faltar aperol 🧡",
+    description: "Para não faltar Aperol na festa",
     value: "R$ 100",
     image: aperolPhoto,
     imageClassName: "object-[50%_48%]",
   },
   {
     id: "gift-08",
-    description: "Pra saber antes como serão os vestidos",
+    description: "Para saber antes como serão os vestidos",
     value: "R$ 250",
     image: vestidosPhoto,
     imageClassName: "object-[50%_44%]",
   },
   {
     id: "gift-09",
-    description: "Auxilio terapia pós TCC",
+    description: "Auxílio terapia pós TCC",
     value: "R$50",
     image: terapiaPhoto,
     imageClassName: "object-[50%_48%]",
@@ -151,21 +157,14 @@ const giftItems: GiftItem[] = [
   {
     id: "gift-11",
     description: "Passe livre pra roubar docinho antes da hora",
-    value: "R$ 50",
+    value: "R$ 80",
     image: roubarDocinhoPhoto,
-    imageClassName: "object-[50%_48%]",
-  },
-  {
-    id: "gift-12",
-    description: "Pulseira pra ser a primeira do buffet",
-    value: "R$ 120",
-    image: primeiroBuffetPhoto,
     imageClassName: "object-[50%_48%]",
   },
   {
     id: "gift-13",
     description: "Dei o MELHOR presente",
-    value: "R$ 500",
+    value: "R$ 1000",
     image: melhorPresentePhoto,
     imageClassName: "object-[50%_45%]",
   },
@@ -184,38 +183,46 @@ const giftItems: GiftItem[] = [
     imageClassName: "object-[50%_50%]",
   },
   {
-    id: "gift-16",
-    description: "Agora você é oficialmente o convidado favorito",
-    value: flexibleGiftValueLabel,
-  },
-  {
     id: "gift-17",
     description: "Direito vitalício de dizer: eu ajudei a pagar essa festa",
-    value: flexibleGiftValueLabel,
+    image: ajudaipagar,
+    imageClassName: "object-[50%_50%]",
+    value: "R$ 400",
   },
   {
     id: "gift-18",
     description: "Se, por uma intervenção divina, você se sentir tocado",
-    value: flexibleGiftValueLabel,
+    image: intervencaodivina,
+    imageClassName: "object-[50%_50%]",
+    value: "R$ 600",
   },
-  {
-    id: "gift-19",
-    description: "Só pra não dizer que não dei nada",
-    value: flexibleGiftValueLabel,
-  },
+
   {
     id: "gift-20",
     description: "Cota para ser o parente favorito",
-    value: flexibleGiftValueLabel,
+    image: parentefavorito,
+    imageClassName: "object-[50%_50%]",
+    value: "R$ 320",
   },
   {
     id: "gift-21",
     description: "Taxa pra falar mal da festa com propriedade",
-    value: flexibleGiftValueLabel,
+    image: direitojulgar,
+    imageClassName: "object-[50%_50%]",
+    value: "R$ 700",
   },
   {
     id: "gift-22",
     description: "Adicionar músicas na playlist do DJ",
+    image: dj,
+    imageClassName: "object-[50%_50%]",
+    value: "R$ 100",
+  },
+  {
+    id: "gift-19",
+    description: "Só pra não dizer que não dei nada",
+    image: naodeinaad,
+    imageClassName: "object-[50%_50%]",
     value: flexibleGiftValueLabel,
   },
 ];
