@@ -32,7 +32,7 @@ import direitojulgar from "../assets/fotosPresentes/direitojulgar.jpeg";
 import dj from "../assets/fotosPresentes/dj.jpeg";
 import intervencaodivina from "../assets/fotosPresentes/intervencaodivina.jpeg";
 import naodeinaad from "../assets/fotosPresentes/naodeinaad.jpeg";
-import parentefavorito from "../assets/fotosPresentes/parentefavorito.jpeg";
+import parentefavorito from "../assets/fotosPresentes/parenteFavorito.jpeg";
 
 import { countdownLabelClassName } from "./countdown-section";
 
