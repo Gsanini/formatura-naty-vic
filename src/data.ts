@@ -1,10 +1,10 @@
-export const GRADUATION_DATE = new Date("2026-09-05T19:45:00-03:00");
+export const GRADUATION_DATE = new Date("2026-09-05T19:30:00-03:00");
 
 export const GRADUATION_DATE_PARTS = {
   day: "05",
   month: "Setembro",
   year: "2026",
-  time: "19:00",
+  time: "19:30",
 };
 
 export const GRADUATION_MEETING = {
@@ -16,12 +16,12 @@ export const RSVP_WHATSAPP_PHONE = "5551997162706";
 
 export const TIMELINE = [
   {
-    time: "19h",
+    time: "19:30h",
     title: "Recepção dos convidados",
     description: "Os primeiros sorrisos de uma noite feita para celebrar.",
   },
   {
-    time: "19h45",
+    time: "20h",
     title: "Brinde e jantar",
     description: "Taças ao alto e um jantar especial.",
   },
