@@ -92,13 +92,6 @@ const recipients: Recipient[] = [
 
 const giftItems: GiftItem[] = [
   {
-    id: "gift-01",
-    description: "Ajude os patrocinadores oficiais",
-    value: "R$ 350",
-    image: patrocinadoresPhoto,
-    imageClassName: "object-[50%_48%]",
-  },
-  {
     id: "gift-02",
     description: "Botinas novas pra engenheira",
     value: "R$ 150",
@@ -159,6 +152,13 @@ const giftItems: GiftItem[] = [
     description: "Passe livre pra roubar docinho antes da hora",
     value: "R$ 80",
     image: roubarDocinhoPhoto,
+    imageClassName: "object-[50%_48%]",
+  },
+  {
+    id: "gift-01",
+    description: "Ajude os patrocinadores oficiais",
+    value: "R$ 350",
+    image: patrocinadoresPhoto,
     imageClassName: "object-[50%_48%]",
   },
   {
