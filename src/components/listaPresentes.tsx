@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Check,
+  ChevronDown,
   Copy,
   Gift,
   MessageCircle,
@@ -309,43 +310,42 @@ function GiftVisual({
   );
 }
 
-function scrollMobileModalTo(
-  scrollContainer: HTMLElement | null,
-  target: HTMLElement | null,
-) {
-  if (
-    !scrollContainer ||
-    !target ||
-    typeof window === "undefined" ||
-    !window.matchMedia("(max-width: 767px)").matches
-  ) {
-    return;
+async function copyTextToClipboard(text: string) {
+  if (navigator.clipboard?.writeText && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // Alguns navegadores Android e WebViews expõem a API, mas bloqueiam seu uso.
+    }
   }
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.readOnly = true;
+  textArea.setAttribute("aria-hidden", "true");
+  textArea.style.position = "fixed";
+  textArea.style.inset = "0";
+  textArea.style.width = "1px";
+  textArea.style.height = "1px";
+  textArea.style.opacity = "0";
 
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      const containerRect = scrollContainer.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      const top =
-        targetRect.top - containerRect.top + scrollContainer.scrollTop - 16;
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  textArea.setSelectionRange(0, text.length);
 
-      scrollContainer.scrollTo({
-        top: Math.max(0, top),
-        behavior: prefersReducedMotion ? "auto" : "smooth",
-      });
-    });
-  });
+  const wasCopied = document.execCommand("copy");
+  textArea.remove();
+
+  if (!wasCopied) {
+    throw new Error("Clipboard unavailable");
+  }
 }
 
 export default function ListaPresentes() {
   const rootRef = useRef<HTMLElement>(null);
-  const modalScrollRef = useRef<HTMLDivElement>(null);
-  const paymentFormRef = useRef<HTMLElement>(null);
-  const paymentResultRef = useRef<HTMLElement>(null);
+  const paymentDialogRef = useRef<HTMLDivElement>(null);
   const [modalGift, setModalGift] = useState<GiftItem | null>(null);
   const [selectedRecipientId, setSelectedRecipientId] =
     useState<RecipientId | null>(null);
@@ -416,7 +416,11 @@ export default function ListaPresentes() {
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        handleCloseGiftModal();
+        if (paymentQrCode) {
+          handleClosePaymentModal();
+        } else {
+          handleCloseGiftModal();
+        }
       }
     }
 
@@ -427,22 +431,12 @@ export default function ListaPresentes() {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [modalGift]);
+  }, [modalGift, paymentQrCode]);
 
   useEffect(() => {
-    if (!selectedRecipientId) {
-      return;
+    if (paymentQrCode) {
+      paymentDialogRef.current?.focus();
     }
-
-    scrollMobileModalTo(modalScrollRef.current, paymentFormRef.current);
-  }, [selectedRecipientId]);
-
-  useEffect(() => {
-    if (!paymentQrCode) {
-      return;
-    }
-
-    scrollMobileModalTo(modalScrollRef.current, paymentResultRef.current);
   }, [paymentQrCode]);
 
   function resetPaymentState() {
@@ -465,6 +459,12 @@ export default function ListaPresentes() {
     setGiftMessage("");
     setIsGeneratingPayment(false);
     resetPaymentState();
+  }
+
+  function handleClosePaymentModal() {
+    setPaymentQrCode(null);
+    setPaymentError(null);
+    setIsCopiedPaymentCode(false);
   }
 
   function handleSelectRecipient(recipient: Recipient) {
@@ -547,11 +547,13 @@ export default function ListaPresentes() {
     }
 
     try {
-      await navigator.clipboard.writeText(paymentQrCode.brCode);
+      await copyTextToClipboard(paymentQrCode.brCode);
       setIsCopiedPaymentCode(true);
       window.setTimeout(() => setIsCopiedPaymentCode(false), 1800);
     } catch {
-      setPaymentError("Nao foi possivel copiar o codigo Pix.");
+      setPaymentError(
+        "Não foi possível copiar automaticamente. Toque no código abaixo para selecioná-lo e copie manualmente.",
+      );
     }
   }
 
@@ -625,7 +627,8 @@ export default function ListaPresentes() {
 
       {modalGift ? (
         <div
-          ref={modalScrollRef}
+          aria-hidden={paymentQrCode ? true : undefined}
+          inert={Boolean(paymentQrCode)}
           className='fixed inset-0 z-50 overflow-y-auto overscroll-contain px-4 py-6 [scrollbar-gutter:stable] [-webkit-overflow-scrolling:touch]'
         >
           <button
@@ -635,7 +638,7 @@ export default function ListaPresentes() {
             onClick={handleCloseGiftModal}
           />
 
-          <div className='relative z-10 flex min-h-full items-center justify-center'>
+          <div className='relative z-10 flex min-h-full items-start justify-center md:items-center'>
             <div
               role='dialog'
               aria-modal='true'
@@ -665,13 +668,7 @@ export default function ListaPresentes() {
                 </button>
               </div>
 
-              <div
-                className={`grid min-h-0 overflow-y-visible p-5 max-[640px]:p-4 md:overflow-y-auto md:overscroll-contain md:gap-6 md:[-webkit-overflow-scrolling:touch] ${
-                  paymentQrCode
-                    ? "md:grid-cols-[minmax(220px,0.74fr)_minmax(0,1fr)] lg:grid-cols-[minmax(220px,0.7fr)_minmax(330px,1fr)_minmax(260px,0.78fr)]"
-                    : "md:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]"
-                }`}
-              >
+              <div className='grid min-h-0 overflow-y-visible p-5 max-[640px]:p-4 md:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] md:gap-6 md:overflow-y-auto md:overscroll-contain md:[-webkit-overflow-scrolling:touch]'>
                 <aside className='md:sticky md:top-0 md:self-start'>
                   <GiftVisual gift={modalGift} variant='modal' />
                   <div className='mt-4 flex items-center justify-between gap-3 border-y border-border/55 py-3'>
@@ -694,7 +691,7 @@ export default function ListaPresentes() {
                       Para quem vai?
                     </div>
 
-                    <div className='mt-3 grid grid-cols-2 gap-2 max-[430px]:grid-cols-1'>
+                    <div className='mt-3 grid grid-cols-2 gap-2'>
                       {recipients.map((recipient) => {
                         const isSelected = selectedRecipientId === recipient.id;
                         const hasPixKey = Boolean(recipient.pixKey);
@@ -703,7 +700,7 @@ export default function ListaPresentes() {
                           <button
                             key={recipient.id}
                             type='button'
-                            className={`flex min-h-22 flex-col items-start justify-center gap-2 rounded-[4px] border px-3.5 py-3 text-left transition ${
+                            className={`flex min-h-20 flex-col items-start justify-center gap-2 rounded-[4px] border px-3.5 py-3 text-left transition ${
                               isSelected
                                 ? "border-accent bg-accent/12"
                                 : "border-border/70 bg-white/60 hover:border-accent hover:bg-accent/10"
@@ -731,11 +728,23 @@ export default function ListaPresentes() {
                         );
                       })}
                     </div>
+
+                    {selectedRecipient ? (
+                      <p
+                        className='mt-3 flex items-center justify-center gap-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-accent md:hidden'
+                        aria-live='polite'
+                      >
+                        Continue abaixo para gerar o Pix
+                        <ChevronDown
+                          className='size-4 shrink-0 animate-bounce'
+                          strokeWidth={1.8}
+                        />
+                      </p>
+                    ) : null}
                   </section>
 
                   {selectedRecipient ? (
                     <section
-                      ref={paymentFormRef}
                       className='scroll-mt-4 border-t border-border/55 pt-5'
                     >
                       <div className='flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-foreground/50'>
@@ -804,55 +813,104 @@ export default function ListaPresentes() {
                   ) : null}
                 </div>
 
-                {paymentQrCode ? (
-                  <aside
-                    ref={paymentResultRef}
-                    className='grid scroll-mt-4 gap-4 border-t border-border/55 pt-5 md:col-start-2 md:row-start-2 lg:col-start-auto lg:row-start-auto lg:sticky lg:top-0 lg:self-start lg:border-t-0 lg:border-l lg:pt-0 lg:pl-6'
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {modalGift && paymentQrCode ? (
+        <div className='fixed inset-0 z-[60] overflow-y-auto overscroll-contain px-4 py-6 [scrollbar-gutter:stable] [-webkit-overflow-scrolling:touch]'>
+          <button
+            type='button'
+            className='fixed inset-0 bg-primary/55 backdrop-blur-[3px]'
+            aria-label='Fechar QR Code Pix'
+            onClick={handleClosePaymentModal}
+          />
+
+          <div className='relative z-10 flex min-h-full items-start justify-center md:items-center'>
+            <div
+              ref={paymentDialogRef}
+              role='dialog'
+              aria-modal='true'
+              aria-labelledby='payment-modal-title'
+              tabIndex={-1}
+              className='relative mx-auto w-full max-w-[520px] overflow-hidden rounded-[8px] border border-white/80 bg-background shadow-[0_30px_110px_rgba(49,32,28,0.32)] outline-none'
+            >
+              <header className='flex items-start justify-between gap-4 border-b border-border/55 px-5 py-4 max-[640px]:px-4'>
+                <div>
+                  <p className='font-body text-[10px] font-semibold uppercase tracking-[0.28em] text-accent'>
+                    Pix gerado
+                  </p>
+                  <h3
+                    id='payment-modal-title'
+                    className='mt-2 font-display text-[1.7rem] font-light leading-[1.02] text-primary max-[640px]:text-[1.4rem]'
                   >
-                    <div>
-                      <div className='flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-accent'>
-                        <QrCode className='size-3.5' strokeWidth={1.7} />
-                        Pix gerado
-                      </div>
-                      <p className='mt-3 font-body text-[0.9rem] leading-relaxed text-foreground/68'>
-                        {parseCurrencyValue(modalGift.value) > 0
-                          ? `Enviar ${modalGift.value} para `
-                          : "Pix sem valor fixo para "}
-                        <span className='font-semibold text-primary'>
-                          {paymentQrCode.recipient.name}
-                        </span>
-                        .
-                      </p>
-                    </div>
+                    Pix para {paymentQrCode.recipient.name}
+                  </h3>
+                </div>
 
-                    <div className='mx-auto w-full max-w-[320px] rounded-[6px] border border-border/60 bg-white p-3 shadow-[0_18px_54px_rgba(49,32,28,0.12)]'>
-                      <img
-                        src={paymentQrCode.imageUrl}
-                        alt={`QR Code Pix para ${paymentQrCode.recipient.name}`}
-                        className='aspect-square w-full object-contain'
-                      />
-                    </div>
+                <button
+                  type='button'
+                  className='grid size-10 shrink-0 place-items-center rounded-[4px] border border-primary/15 text-primary transition hover:border-primary/35 hover:bg-white'
+                  aria-label='Fechar QR Code Pix'
+                  onClick={handleClosePaymentModal}
+                >
+                  <X className='size-4' strokeWidth={1.8} />
+                </button>
+              </header>
 
-                    {paymentQrCode.infoAdicional ? (
-                      <p className='rounded-[6px] bg-white/70 px-3 py-2 font-body text-[0.82rem] leading-relaxed text-foreground/65'>
-                        Mensagem: {paymentQrCode.infoAdicional}
-                      </p>
-                    ) : null}
+              <div className='grid gap-4 p-5 max-[640px]:p-4'>
+                <p className='font-body text-[0.9rem] leading-relaxed text-foreground/68'>
+                  {parseCurrencyValue(modalGift.value) > 0
+                    ? `Enviar ${modalGift.value} para `
+                    : "Pix sem valor fixo para "}
+                  <span className='font-semibold text-primary'>
+                    {paymentQrCode.recipient.name}
+                  </span>
+                  .
+                </p>
 
-                    <button
-                      type='button'
-                      className='inline-flex h-11 w-full items-center justify-center gap-2 rounded-[4px] border border-primary/20 px-3.5 font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-primary transition hover:border-primary/45 hover:bg-white'
-                      onClick={handleCopyPaymentCode}
-                    >
-                      {isCopiedPaymentCode ? (
-                        <Check className='size-4' strokeWidth={1.8} />
-                      ) : (
-                        <Copy className='size-4' strokeWidth={1.8} />
-                      )}
-                      {isCopiedPaymentCode ? "Copiado" : "Copiar codigo"}
-                    </button>
-                  </aside>
+                <div className='mx-auto w-full max-w-[320px] rounded-[6px] border border-border/60 bg-white p-3 shadow-[0_18px_54px_rgba(49,32,28,0.12)]'>
+                  <img
+                    src={paymentQrCode.imageUrl}
+                    alt={`QR Code Pix para ${paymentQrCode.recipient.name}`}
+                    className='aspect-square w-full object-contain'
+                  />
+                </div>
+
+                <label className='grid gap-2'>
+                  <span className='font-body text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-foreground/50'>
+                    Pix copia e cola
+                  </span>
+                  <textarea
+                    readOnly
+                    rows={3}
+                    value={paymentQrCode.brCode}
+                    onFocus={(event) => event.currentTarget.select()}
+                    aria-label='Código Pix copia e cola'
+                    className='w-full resize-none break-all rounded-[6px] border border-border/60 bg-white/70 px-3 py-2 font-mono text-[0.72rem] leading-relaxed text-foreground outline-none focus:border-accent'
+                  />
+                </label>
+
+                {paymentError ? (
+                  <p className='rounded-[6px] border border-primary/25 bg-white/70 px-3.5 py-3 font-body text-[0.82rem] leading-relaxed text-primary'>
+                    {paymentError}
+                  </p>
                 ) : null}
+
+                <button
+                  type='button'
+                  className='inline-flex h-11 w-full items-center justify-center gap-2 rounded-[4px] bg-primary px-3.5 font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-background transition hover:bg-primary-strong'
+                  onClick={handleCopyPaymentCode}
+                >
+                  {isCopiedPaymentCode ? (
+                    <Check className='size-4' strokeWidth={1.8} />
+                  ) : (
+                    <Copy className='size-4' strokeWidth={1.8} />
+                  )}
+                  {isCopiedPaymentCode ? "Copiado" : "Copiar código Pix"}
+                </button>
               </div>
             </div>
           </div>
